@@ -16,7 +16,7 @@
 
 #include <stdlib.h>
 
-//hello
+
 
 using namespace std;
 
@@ -35,6 +35,8 @@ public:
         siguiente = NULL;
 
         anterior =NULL;
+
+        abajo = NULL;
 
     }
 
@@ -173,9 +175,7 @@ int listaDC::largoLista()
 
 {
 
-    int cont=0;
-
-
+    int cont=1;
 
     pnodo aux = primero;
 
@@ -183,7 +183,7 @@ int listaDC::largoLista()
 
     {
 
-        return cont;
+        return 0;
 
     }
 
@@ -194,7 +194,6 @@ int listaDC::largoLista()
         while(aux->siguiente!=primero)
 
         {
-
             aux=aux->siguiente;
 
             cont++;
@@ -564,7 +563,28 @@ void listaDC::Mostrar()
 
 }
 
+void listaDC::MostrarAbajo()
+{
+    pnodo aux= primero;
 
+    while(aux->siguiente!=primero)
+    {
+        cout << aux->valor << "-> ";
+        pnodo abaux = aux->abajo;
+        cout<<"abajo"<<endl;
+        while (abaux=!NULL){
+            cout<<abaux->valor<<"->";
+            abaux = abaux->abajo;
+        }
+        aux = aux->siguiente;
+
+    }
+
+    cout<<endl;
+
+
+
+}
 string listaDC::getStr(string linea,int opc,string busq)
 {
     string Str[6];
@@ -606,13 +626,19 @@ int listaDC::Valid(string cod,int opc)
     if (opc==1)st="CodPais";
     if (opc==2)st="CodCiudad";
     if (opc==3)st="CodConexion";
-    for (int i=1;i<=largoLista();i++){
-        cout<<"HOLAAAA"<<endl;
-        string linea = getByPos(i);
-        cout<< linea;
-        if (cod== getStr(linea,opc,st)) return 0;
+    int i =0;
+    cod= getStr(cod,opc,st);
+    //string lista[100];
+
+    while (i <(this->largoLista())){
+        string linea = getByPos(i+1);
+        string comp = getStr(linea,opc,st);
+        if (cod == comp){
+            return 1;
+        }
+        i++;
     }
-    return 1;
+    return 0;
 }
 
 
@@ -622,22 +648,52 @@ void listaDC:: archivos(int opc) {
 
     string linea;
 
-    if (opc == 1) archivo.open("Paises.txt");
+    if (opc == 1) {
+        archivo.open("Paises.txt");
+        while (getline(archivo, linea)) {
+            if (ListaVacia()) InsertarFinal(linea);
+            else{
+                int val = Valid(linea,opc);
+                if(val==0){
+                    InsertarFinal(linea);
+            }}}}
+    if (opc == 2) {
+        archivo.open("Ciudades.txt");
+        while (getline(archivo, linea)) {
+            if (ListaVacia()){
+                string pais = getStr(linea,opc,"CodPais");
+                pnodo aux = Paises->primero;
+                pnodo pabajo = Paises->abajo;
+                string codCiud =getStr(linea,opc,"CodCiudad");
+                string nombre =getStr(linea,opc,"NombreCiudad");
+                for (int i=0;i<Paises->largoLista();i++){
+                    if (pais == getStr(aux->valor)){
+                        if (pabajo== Null) Paises->abajo = InsertarFinal((codCiud+";"+ nombre));
+                        else {
+                            while (pabajo=!Null){
+                                pabajo = pabajo-> abajo;
+                            }
+                            InsertarFinal((codCiud+";"+ nombre));
+                    else aux = aux->siguiente;
+                        }
+                    }
 
-    if (opc == 2) archivo.open("Ciudades.txt");
 
+                }
+             InsertarFinal(linea);}
+            else{
+                int val = Valid(linea,opc);
+                if(val==0){
+                    InsertarFinal(linea);
+            }}}
+
+    }
     if (opc == 3) archivo.open("Conexiones.txt");
 
 
-
-    while (getline(archivo, linea)) {
-        if (ListaVacia()) InsertarFinal(linea);
-        else{
-            string cod = getStr(linea,opc,"CodPais");
-            cout<< cod<< endl;
-            if ((Valid(cod,opc))==0)InsertarFinal(linea);
-            else cout<<"nope"<<endl;
         }
+        //InsertarFinal(linea);
+        //Mostrar();
     }
 
 
@@ -648,25 +704,23 @@ void listaDC:: archivos(int opc) {
 
 int main() {
 
-    listaDC Lista;
-
     listaDC Paises;
-
     listaDC Ciudades;
-
     listaDC Conexiones;
+    listaDC TiposTrenes;
+    listaDC Trenes;
+    listaDC Rutas;
 
 
 
 
     Paises.archivos(1);
-    Paises.Mostrar();
     Ciudades.archivos(2);
     Conexiones.archivos(3);
+
+
     Paises.Mostrar();
-
     Ciudades.Mostrar();
-
     Conexiones.Mostrar();
 
 
