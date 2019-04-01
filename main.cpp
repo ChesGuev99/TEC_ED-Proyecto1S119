@@ -26,11 +26,13 @@ class nodo {
 
 public:
 
-    nodo(string v)
+    Paises(string Cod, string Pais)
 
     {
 
-        valor = v;
+        cod = Cod;
+
+        nombre = Pais;
 
         siguiente = NULL;
 
@@ -38,25 +40,104 @@ public:
 
         abajo = NULL;
 
+        arriba = NULL;
+
+
     }
 
 
 
-    nodo(string v, nodo * signodo)
+    Paises(string Cod, string Pais, nodo * signodo)
 
     {
 
-        valor = v;
+        cod = Cod;
+
+        nombre = Pais;
 
         siguiente = signodo;
 
+
     }
 
+    Ciudades(string Pais, string Cod, string Ciudad)
+
+    {
+        pais = Pais;
+
+        cod = Cod;
+
+        nombre = Ciudad;
+
+        siguiente = NULL;
+
+        anterior =NULL;
+
+        abajo = NULL;
+
+        arriba = NULL;
+    }
+
+    Ciudades(string Pais, string Cod, string Ciudad, nodo *signodo)
+
+    {
+        pais = Pais;
+
+        cod = Cod;
+
+        nombre = Ciudad;
+
+        abajo = signodo;
+
+    }
+    Conexiones(string Pais,string Ciudad, string Cod, string Pais2, string Ciudad2, string tiempo )
+
+    {
+        PaisSalida = Pais;
+
+        CiudadSalida = Ciudad;
+
+        cod = Cod;
+
+        PaisLlegada = Pais2;
+
+        CiudadLlegada = Ciudad2;
+
+        Horas = tiempo;
+
+        siguiente = NULL;
+
+        anterior =NULL;
+    }
+
+    Conexiones(string Pais,string Ciudad, string Cod, string Pais2, string Ciudad2, string tiempo , nodo *signodo)
+    {
+        PaisSalida = Pais;
+
+        CiudadSalida = Ciudad;
+
+        cod = Cod;
+
+        PaisLlegada = Pais2;
+
+        CiudadLlegada = Ciudad2;
+
+        Horas = tiempo;
+
+        siguiente = signodo;
+    }
 
 
 private:
 
-    string valor;
+    string cod;
+    string nombre;
+    string pais;
+    string PaisSalida;
+    string PaisLlegada;
+    string CiudadSalida;
+    string CiudadLlegada;
+    string Horas;
 
     nodo *siguiente;
 
@@ -64,8 +145,7 @@ private:
 
     nodo *abajo;
 
-
-
+    nodo *arriba;
 
 
     friend class listaDC;
@@ -73,6 +153,63 @@ private:
 };
 
 
+
+class Pais {
+
+public:
+
+    Paises(string Cod, string Nombre)
+
+    {
+
+        cod = Cod;
+
+        nombre = Nombre;
+
+        siguiente = NULL;
+
+        anterior =NULL;
+
+        abajo = NULL;
+
+        arriba = NULL;
+
+
+    }
+
+
+
+    Paises(string Cod, string Pais, nodo * signodo)
+
+    {
+
+        cod = Cod;
+
+        nombre = Pais;
+
+        siguiente = signodo;
+
+
+    }
+
+
+private:
+
+    string cod;
+    string nombre;
+
+    nodo *siguiente;
+
+    nodo *anterior;
+
+    nodo *abajo;
+
+    nodo *arriba;
+
+
+    friend class listaDC;
+
+};
 
 typedef nodo *pnodo;
 
@@ -87,11 +224,8 @@ public:
 
 
 
-    void InsertarInicio(string v);
+    void InsertarPais(string cod,string nombre);
 
-    void InsertarFinal(string v);
-
-    void InsertarPos (string v, int pos);
 
     void EliminarInicio();
 
@@ -99,13 +233,15 @@ public:
 
     void EliminarPos(int pos);
 
+
     bool ListaVacia() { return primero == NULL; }
+
 
     void Imprimir();
 
     void Borrar(string v);
 
-    void Mostrar();
+    void MostrarPais();
 
     void Siguiente();
 
@@ -127,7 +263,7 @@ public:
 
     string getByPos(int pos);
 
-    string getStr(string linea,int opc,string busq);
+    string getStr(string linea,int opc);
 
     int Valid(string cod,int opc);
 
@@ -142,6 +278,8 @@ private:
 
     pnodo primero;
 
+    //pnodo primeroH;
+
     pnodo actual;
 
 };
@@ -152,8 +290,6 @@ listaDC::~listaDC()
 {
 
     pnodo aux;
-
-
 
     while(primero) {
 
@@ -168,7 +304,6 @@ listaDC::~listaDC()
         delete aux;
 
     }
-
     actual = NULL;
 
 }
@@ -219,7 +354,7 @@ string listaDC::getByPos(int pos)
         cout << "Lista vacia" <<endl;
     else
     {
-        if (pos == 1) return primero->valor;
+        if (pos == 1) return primero->cod;
         if((pos>largoLista())||(pos<0))
             cout << "Error en posicion" << endl;
         else
@@ -231,24 +366,21 @@ string listaDC::getByPos(int pos)
                 aux=aux->siguiente;
                 cont++;
             }
-            return aux->valor;
+            return aux->cod;
         }
     }
 }
 
 
-void listaDC::InsertarInicio(string v)
+void listaDC::InsertarPais(string cod,string nombre)
 
 {
-
-
 
     if (ListaVacia())
 
     {
 
-        primero = new nodo(v);
-
+        primero = new nodo(cod,nombre);
         primero->anterior=primero;
 
         primero->siguiente=primero;
@@ -259,45 +391,7 @@ void listaDC::InsertarInicio(string v)
 
     {
 
-        pnodo nuevo=new nodo (v);
-
-        nuevo->siguiente=primero;
-
-        nuevo->anterior= primero->anterior;
-
-        primero->anterior->siguiente=nuevo;
-
-        nuevo->siguiente->anterior=nuevo;
-
-        primero= nuevo;
-
-    }
-
-}
-
-
-
-void listaDC::InsertarFinal(string v)
-
-{
-
-    if (ListaVacia())
-
-    {
-
-        primero = new nodo(v);
-
-        primero->anterior=primero;
-
-        primero->siguiente=primero;
-
-    }
-
-    else
-
-    {
-
-        pnodo nuevo = new nodo(v);
+        pnodo nuevo = new nodo(cod,nombre);
 
         nuevo->anterior = primero->anterior;
 
@@ -310,79 +404,6 @@ void listaDC::InsertarFinal(string v)
     }
 
 }
-
-
-
-
-
-void listaDC::InsertarPos(string v,int pos)
-
-{
-
-    if (ListaVacia())
-
-    {
-
-        primero = new nodo(v);
-
-        primero->anterior=primero;
-
-        primero->siguiente=primero;
-
-    }
-
-    else
-
-    {
-
-        if(pos <=1)
-
-            InsertarInicio(v);
-
-        else
-
-        {
-
-            if (pos==largoLista())
-
-                InsertarFinal(v);
-
-            else
-
-            {
-
-                pnodo aux= primero;
-
-                int i =2;
-
-                while((i != pos )&&(aux->siguiente!= primero))
-
-                {
-
-                    i++;
-
-                    aux=aux->siguiente;
-
-                }
-
-                pnodo nuevo= new nodo(v);
-
-                nuevo->siguiente=aux->siguiente;
-
-                aux->siguiente=nuevo;
-
-                aux->siguiente->anterior=aux;
-
-                nuevo->siguiente->anterior=nuevo;
-
-            }
-
-        }
-
-    }
-
-}
-
 
 
 void listaDC::BorrarFinal()
@@ -542,7 +563,7 @@ void listaDC:: borrarPosicion(int pos)
 
 
 
-void listaDC::Mostrar()
+void listaDC::MostrarPais()
 
 {
 
@@ -554,13 +575,13 @@ void listaDC::Mostrar()
 
 
 
-        cout << aux->valor << "-> ";
+        cout << aux->cod << ", "<<aux->nombre;" ->   ";
 
         aux = aux->siguiente;
 
     }
 
-    cout<<aux->valor<<"->";
+    cout << aux->cod << ", "<<aux->nombre;
 
     cout<<endl;
 
@@ -588,7 +609,7 @@ void listaDC::MostrarAbajo()
 
 
 }
-string listaDC::getStr(string linea,int opc,string busq)
+array listaDC::getStr(string linea,int opc)
 {
     string Str[6];
     //int largo= (sizeof(Str)/sizeof(Str[0]));
@@ -607,17 +628,18 @@ string listaDC::getStr(string linea,int opc,string busq)
         }
         i++;
     }
-    Str[j]= palabra;
+    Str[j]= palabra.substr(0,palabra.length()-1);
 
+    return Str;
 
-    if (busq == "CodPais")return Str[0];
+    /*if (busq == "CodPais")return Str[0];
     if (busq == "NombrePais")return Str[1];
     if (busq == "CodCiudad")return Str[1];
     if (busq == "NombreCiudad")return Str[2];
     if (busq == "CodConexion")return Str[2];
     if (busq == "InicioConexion")return (Str[0]+";"+Str[1]);
     if (busq == "DestinoConexion")return (Str[3]+";"+Str[4]);
-    if (busq == "HorasConexion")return Str[5];
+    if (busq == "HorasConexion")return Str[5];*/
 
     return 0;
 
@@ -625,18 +647,17 @@ string listaDC::getStr(string linea,int opc,string busq)
 
 int listaDC::Valid(string cod,int opc)
 {
-    string st;
-    if (opc==1)st="CodPais";
+    //string *st;
+   /* if (opc==1)st="CodPais";
     if (opc==2)st="CodCiudad";
     if (opc==3)st="CodConexion";
     int i =0;
-    cod= getStr(cod,opc,st);
-    //string lista[100];
+    //string lista[100];*/
 
     while (i <(this->largoLista())){
         string linea = getByPos(i+1);
-        string comp = getStr(linea,opc,st);
-        if (cod == comp){
+        string *comp = getStr(linea,opc);
+        if (cod == comp[0]){
             return 1;
         }
         i++;
@@ -650,18 +671,14 @@ void listaDC:: archivos() {
     ifstream archivo;
 
     string linea;
-    int opc=1;
-
-    if (opc == 1) {
-        archivo.open("Paises.txt");
-        while (getline(archivo, linea)) {
-            if (ListaVacia()) InsertarFinal(linea);
-            else{
-                int val = Valid(linea,opc);
-                if(val==0){
-                    InsertarFinal(linea);
-                }}}}
-    opc++;
+    archivo.open("Paises.txt");
+    while (getline(archivo, linea)) {
+        string *datos = getStr(linea,1);
+        int val = Valid(datos[0],1);
+        if(val==0){
+            InsertarFinal(datos[0],datos[1]);
+        }}
+    /*opc++;
     if (opc == 2) {
         archivo.open("Ciudades.txt");
         while (getline(archivo, linea)) {
@@ -695,7 +712,7 @@ void listaDC:: archivos() {
     }
     opc++;
     if (opc == 3) archivo.open("Conexiones.txt");
-
+    */
     archivo.close();
 
 }
@@ -727,12 +744,6 @@ int main() {
 
 
     cin.get();
-
-
-
     return 0;
 
-
-
 }
-
