@@ -26,7 +26,7 @@ class nodo {
 
 public:
 
-    Paises(string Cod, string Pais)
+    nodo(string Cod, string Pais)
 
     {
 
@@ -47,7 +47,7 @@ public:
 
 
 
-    Paises(string Cod, string Pais, nodo * signodo)
+    nodo(string Cod, string Pais, nodo * signodo)
 
     {
 
@@ -60,7 +60,7 @@ public:
 
     }
 
-    Ciudades(string Pais, string Cod, string Ciudad)
+    nodo(string Pais, string Cod, string Ciudad)
 
     {
         pais = Pais;
@@ -78,7 +78,7 @@ public:
         arriba = NULL;
     }
 
-    Ciudades(string Pais, string Cod, string Ciudad, nodo *signodo)
+    nodo(string Pais, string Cod, string Ciudad, nodo *signodo)
 
     {
         pais = Pais;
@@ -90,7 +90,7 @@ public:
         abajo = signodo;
 
     }
-    Conexiones(string Pais,string Ciudad, string Cod, string Pais2, string Ciudad2, string tiempo )
+    nodo(string Pais,string Ciudad, string Cod, string Pais2, string Ciudad2, string tiempo )
 
     {
         PaisSalida = Pais;
@@ -110,7 +110,7 @@ public:
         anterior =NULL;
     }
 
-    Conexiones(string Pais,string Ciudad, string Cod, string Pais2, string Ciudad2, string tiempo , nodo *signodo)
+    nodo(string Pais,string Ciudad, string Cod, string Pais2, string Ciudad2, string tiempo , nodo *signodo)
     {
         PaisSalida = Pais;
 
@@ -158,7 +158,7 @@ class Pais {
 
 public:
 
-    Paises(string Cod, string Nombre)
+    Pais(string Cod, string Nombre)
 
     {
 
@@ -179,7 +179,7 @@ public:
 
 
 
-    Paises(string Cod, string Pais, nodo * signodo)
+    Pais(string Cod, string Pais, nodo * signodo)
 
     {
 
@@ -263,7 +263,7 @@ public:
 
     string getByPos(int pos);
 
-    string getStr(string linea,int opc);
+    string* getStr(string linea,int opc);
 
     int Valid(string cod,int opc);
 
@@ -589,7 +589,7 @@ void listaDC::MostrarPais()
 
 void listaDC::MostrarAbajo()
 {
-    pnodo aux= primero;
+/*    pnodo aux= primero;
 
     while(aux->siguiente!=primero)
     {
@@ -603,13 +603,14 @@ void listaDC::MostrarAbajo()
         aux = aux->siguiente;
 
     }
-
+*/
     cout<<endl;
 
 
 
 }
-array listaDC::getStr(string linea,int opc)
+
+string* listaDC::getStr(string linea,int opc)
 {
     string Str[6];
     //int largo= (sizeof(Str)/sizeof(Str[0]));
@@ -648,12 +649,11 @@ array listaDC::getStr(string linea,int opc)
 int listaDC::Valid(string cod,int opc)
 {
     //string *st;
-   /* if (opc==1)st="CodPais";
-    if (opc==2)st="CodCiudad";
-    if (opc==3)st="CodConexion";
+    /* if (opc==1)st="CodPais";
+     if (opc==2)st="CodCiudad";
+     if (opc==3)st="CodConexion";
+     //string lista[100];*/
     int i =0;
-    //string lista[100];*/
-
     while (i <(this->largoLista())){
         string linea = getByPos(i+1);
         string *comp = getStr(linea,opc);
@@ -676,7 +676,7 @@ void listaDC:: archivos() {
         string *datos = getStr(linea,1);
         int val = Valid(datos[0],1);
         if(val==0){
-            InsertarFinal(datos[0],datos[1]);
+            InsertarPais(datos[0],datos[1]);
         }}
     /*opc++;
     if (opc == 2) {
@@ -730,11 +730,9 @@ int main() {
     listaDC Rutas;
 
 
-
-
     PCC.archivos();
 
-    PCC.Mostrar();
+    PCC.MostrarPais();
 
 
     /*Lista.borrarPosicion(2);
