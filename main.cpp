@@ -575,7 +575,7 @@ void listaDC::MostrarPais()
 
 
 
-        cout << aux->cod << ", "<<aux->nombre;" ->   ";
+        cout << aux->cod << ", "<<aux->nombre<<"->  ";
 
         aux = aux->siguiente;
 
